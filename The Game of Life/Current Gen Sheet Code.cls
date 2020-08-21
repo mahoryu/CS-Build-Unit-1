@@ -9,6 +9,17 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Option Explicit
 
+Private Sub Start_Click()
+    StopMacros = Not StopMacros
+    Start.Caption = IIf(StopMacros, "Start", "Stop")
+    If Start.Caption = "Stop" Then
+        Start.BackColor = &HFF&
+    Else
+        Start.BackColor = &HC000&
+    End If
+    If Not StopMacros Then Game_Loop
+End Sub
+
 Private Sub Worksheet_SelectionChange(ByVal Target As Range)
     '''
     ' This sets the workbook to change the values in the field by only cliking on them
