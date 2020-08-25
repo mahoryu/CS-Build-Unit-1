@@ -36,51 +36,62 @@ End Sub
 Sub GameStep()
 
     'store the data in an array and asign it from successor to current
-        Dim data() As Variant
-        Dim Rng As Range
-        
-        Set Rng = Sheets("Successor Generation").Range("C3:AP42")
-        data = Rng
-        Sheets("Current Generation").Range("C3:AP42") = data
-    
-    ' Update the generation value
-    Range("AY2").Value = Range("AY2").Value + 1
-
-End Sub
-
-Sub GameStep_v2()
-
-    'store the data in an array and asign it from successor to current
     Dim current() As Variant
-    Dim successor() As Variant
+    Dim temp(0 To 39, 0 To 39) As Variant
+    Dim successor(1 To 40, 1 To 40) As Variant
     Dim Rng As Range
         
     Set Rng = Sheets("Current Generation").Range("C3:AP42")
     current = Rng
-    successor = current
-        
-    Debug.Print "Start"
+    
+    ' move the array to a 0 based index array because of a limitation with VBA
+    ' (Arrays taken from the sheet are index base 1 and can't be quickly changed
+    '  so I am using a for loop to move the data over)
     Dim i As Integer
-    Dim N As Integer
-    N = UBound(current, 1)
     For i = LBound(current, 1) To UBound(current, 1)
         Dim j As Integer
         For j = LBound(current, 2) To UBound(current, 2)
+            temp(i - 1, j - 1) = current(i, j)
+        Next
+    Next
+    
+    ' loop through the base-0 array
+    Dim N As Integer
+    N = UBound(temp, 1) + 1
+    For i = LBound(temp, 1) To UBound(temp, 1)
+        For j = LBound(temp, 2) To UBound(temp, 2)
                 
             Dim total As Integer
             
-            total = (current(i, (j - 2 + N) Mod N + 1) + _
-                     current(i, (j + 1 + N) Mod N) + _
-                     current((i - 2 + N) Mod N + 1, j) + _
-                     current((i + 1 + N) Mod N, j) + _
-                     current((i - 2 + N) Mod N + 1, (j - 2 + N) Mod N + 1) + _
-                     current((i - 2 + N) Mod N + 1, (j + 1 + N) Mod N) + _
-                     current((i + 1 + N) Mod N, (j + 1 + N) Mod N) + _
-                     current((i + 1 + N) Mod N, (j - 2 + N) Mod N + 1))
-            Next
+            ' Check for the conditionals that set the rules
+            total = (temp(i, (j - 1 + N) Mod N) + _
+                     temp(i, (j + 1 + N) Mod N) + _
+                     temp((i - 1 + N) Mod N, j) + _
+                     temp((i + 1 + N) Mod N, j) + _
+                     temp((i - 1 + N) Mod N, (j - 1 + N) Mod N) + _
+                     temp((i - 1 + N) Mod N, (j + 1 + N) Mod N) + _
+                     temp((i + 1 + N) Mod N, (j + 1 + N) Mod N) + _
+                     temp((i + 1 + N) Mod N, (j - 1 + N) Mod N))
+                     
+            ' Apply the logic and put it in the new array
+            '   (base-1 so that it will paste properly to the sheet)
+            If temp(i, j) = 1 Then
+                If total = 2 Or total = 3 Then
+                    successor(i + 1, j + 1) = 1
+                Else
+                    successor(i + 1, j + 1) = 0
+                End If
+            Else
+                If total = 3 Then
+                    successor(i + 1, j + 1) = 1
+                Else
+                    successor(i + 1, j + 1) = 0
+                End If
+            End If
         Next
+    Next
         
-        Sheets("Current Generation").Range("C3:AP42") = successor
+    Sheets("Current Generation").Range("C3:AP42") = successor
     
     ' Update the generation value
     Range("AY2").Value = Range("AY2").Value + 1
