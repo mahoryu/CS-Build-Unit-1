@@ -9,9 +9,54 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Option Explicit
 
+Private Sub NextGen_Click()
+    GameLoop.GameStep
+End Sub
+
+Private Sub Reset_Click()
+    
+    'Clear current option button selection
+    SimkinGliderGun.Value = False
+    Pentadecathlon.Value = False
+    Pulsar.Value = False
+    SpaceshipFleet.Value = False
+    Random.Value = False
+    
+    'reset the board
+    GameLoop.Reset
+End Sub
+
+Private Sub SimkinGliderGun_Click()
+
+    GameLoop.CopyPreset ("SimkinGliderGun")
+  
+End Sub
+
+Private Sub Pentadecathlon_Click()
+
+    GameLoop.CopyPreset ("Pentadecathlon")
+   
+End Sub
+
+Private Sub Pulsar_Click()
+
+    GameLoop.CopyPreset ("Pulsar")
+    
+End Sub
+
+Private Sub SpaceshipFleet_Click()
+
+    GameLoop.CopyPreset ("SpaceshipFleet")
+    
+End Sub
+
 Private Sub Start_Click()
+    ' Use a public variable to control if clicking the
+    ' button starts or stops the macro
     StopMacros = Not StopMacros
+    ' change the text on the button
     Start.Caption = IIf(StopMacros, "Start", "Stop")
+    ' set a condional on the color of the button
     If Start.Caption = "Stop" Then
         Start.BackColor = &HFF&
     Else

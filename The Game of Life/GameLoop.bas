@@ -106,15 +106,41 @@ Sub Reset()
     End With
 End Sub
 
+Sub CopyPreset(name As String)
+    
+    ' Sample setup made active by copying from the presets sheet
+    '   based on the passed preset name
+
+    GameLoop.Reset
+    
+    Dim sample_data() As Variant
+    Dim Rng As Range
+    Dim cp_data As String
+    Dim pst_data As String
+    
+    If name = "SimkinGliderGun" Then
+        cp_data = "B2:AO10"
+        pst_data = "C4:AP12"
+    End If
+    If name = "Pentadecathlon" Then
+        cp_data = "B14:F22"
+        pst_data = "T18:X26"
+    End If
+    If name = "Pulsar" Then
+        cp_data = "AT11:BH25"
+        pst_data = "O15:AC29"
+    End If
+    If name = "SpaceshipFleet" Then
+        cp_data = "B26:AO65"
+        pst_data = "C3:AP42"
+    End If
+    
+    Set Rng = Sheets("Presets").Range(cp_data)
+    sample_data = Rng
+    
+    Sheets("Current Generation").Range(pst_data) = sample_data
+End Sub
 
 ''TODO:
-'Sample configurations
 'randomize the cells
 
-
-Sub testing()
-    Dim N As Integer
-    N = 40
-    Debug.Print (1 - 2 + N) Mod N + 1
-    Debug.Print (39 + 1) Mod (N)
-End Sub
