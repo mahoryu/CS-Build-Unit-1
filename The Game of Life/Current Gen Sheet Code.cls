@@ -69,15 +69,22 @@ Private Sub Worksheet_SelectionChange(ByVal Target As Range)
     '''
     ' This sets the workbook to change the values in the field by only cliking on them
     '''
-    ' Make sure only one cell is selected so the code doesn't break
-    If Selection.Count = 1 Then
-        ' Make sure it only happens in the defined range
-        If Not Intersect(Target, Range("C3:AP42")) Is Nothing Then
-            ' Change it from alive to dead and vice versa each time a cell is selected
-            If Selection.Value = 0 Then
-                Selection.Value = 1
-            Else
-                Selection.Value = 0
+    
+    ' Don't let the user change the cells if the simulation is running
+    '   Make sure that the selction change action only happens when the
+    '   program is not running.
+    If StopMacros Then
+    
+        ' Make sure only one cell is selected so the code doesn't break
+        If Selection.Count = 1 Then
+            ' Make sure it only happens in the defined range
+            If Not Intersect(Target, Range("C3:AP42")) Is Nothing Then
+                ' Change it from alive to dead and vice versa each time a cell is selected
+                If Selection.Value = 0 Then
+                    Selection.Value = 1
+                Else
+                    Selection.Value = 0
+                End If
             End If
         End If
     End If
