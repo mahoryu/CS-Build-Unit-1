@@ -50,6 +50,25 @@ Private Sub SpaceshipFleet_Click()
     
 End Sub
 
+Private Sub Random_Click()
+    
+    'Set up a random set of values for the field
+    
+    Dim rand_data(1 To 40, 1 To 40) As Variant
+    
+    Dim i As Integer
+    For i = LBound(rand_data, 1) To UBound(rand_data, 1)
+        Dim j As Integer
+        For j = LBound(rand_data, 2) To UBound(rand_data, 2)
+            ' set each value to either a 0 or a 1 randomly
+            rand_data(i, j) = Int((1 - 0 + 1) * Rnd + 0)
+        Next
+    Next
+    
+    Sheets("Current Generation").Range("C3:AP42") = rand_data
+
+End Sub
+
 Private Sub Start_Click()
     ' Use a public variable to control if clicking the
     ' button starts or stops the macro
@@ -88,5 +107,6 @@ Private Sub Worksheet_SelectionChange(ByVal Target As Range)
             End If
         End If
     End If
+    
 End Sub
 
